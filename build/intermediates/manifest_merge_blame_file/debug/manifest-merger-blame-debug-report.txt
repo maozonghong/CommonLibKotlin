@@ -1,0 +1,34 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.mao.library"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+11-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml:3:5-78
+11-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml:3:22-76
+12    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+12-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml:4:5-75
+12-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml:4:22-73
+13
+14    <application>
+14-->D:\AndroidWorkSpace\Commonlibrary\src\main\AndroidManifest.xml:6:5-16:19
+15
+16        <!-- <provider -->
+17        <!-- android:name="androidx.core.content.FileProvider" -->
+18        <!-- android:authorities="${applicationId}.provider" -->
+19        <!-- android:exported="false" -->
+20        <!-- android:grantUriPermissions="true"> -->
+21        <!-- <meta-data -->
+22        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+23        <!-- android:resource="@xml/provider_paths" /> -->
+24        <!-- </provider> -->
+25    </application>
+26
+27</manifest>

@@ -443,13 +443,14 @@ public class FileUtils {
 
             outStream = new ByteArrayOutputStream();
             byte[] data = new byte[512];
-            int count = -1;
+            int count=-1;
             while ((count = fis.read(data, 0, data.length)) != -1) {
                 outStream.write(data, 0, count);
             }
 
             return new String(outStream.toByteArray(), "UTF-8");
         } catch (Throwable e) {
+            e.printStackTrace();
         } finally {
             if (outStream != null) {
                 try {

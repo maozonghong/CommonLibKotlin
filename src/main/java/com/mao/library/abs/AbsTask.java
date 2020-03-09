@@ -233,7 +233,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
             if (needUploadFile && request != null) {
                 response = OkHttpManager.getResponse(hashCode(), url, headers, request.getMultipartEntity());
             } else {
-                response = OkHttpManager.Companion.getResponse(hashCode(), url, headers, request == null ? null : request.getBody(), method_type);
+                response = OkHttpManager.getResponse(hashCode(), url, headers, request == null ? null : request.getBody(), method_type);
             }
 
             if (thread.isCancelled || response == null || response.body() == null) {

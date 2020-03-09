@@ -60,12 +60,6 @@ public class AbsActivityManager {
 
     public boolean onResume(ActivityInterface activity) {
         mActivities.put(activity.getClass().getName(), activity);
-        if (mCurrentActivity == null && activity != null) {
-            Context context = AbsApplication.getInstance();
-            synchronized (context) {
-                context.notifyAll();
-            }
-        }
         mCurrentActivity = activity;
         mTopActivity = activity;
         return true;
@@ -74,6 +68,7 @@ public class AbsActivityManager {
     public boolean onPause(ActivityInterface activity) {
         if (activity == mCurrentActivity) {
             mCurrentActivity = null;
+            mTopActivity=null;
         }
         return true;
     }

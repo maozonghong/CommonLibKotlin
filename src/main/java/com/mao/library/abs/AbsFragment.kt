@@ -18,7 +18,6 @@ abstract class AbsFragment :Fragment(){
     private var isSelected: Boolean = false
     private var isStart: Boolean = false
     private var isFinishing:Boolean = false
-
     /**
      * 实现此方法 返回fragment的布局view
      * @return
@@ -56,10 +55,10 @@ abstract class AbsFragment :Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (mView == null && container != null) {
-            if (getViewId() == 0) {
-                mView = getRootView(container.context)
+            mView = if (getViewId() == 0) {
+                getRootView(container.context)
             } else {
-                mView = View.inflate(container.context, getViewId(), null)
+                View.inflate(container.context, getViewId(), null)
             }
         }
         return mView
@@ -85,6 +84,7 @@ abstract class AbsFragment :Fragment(){
             initListeners()
         }
     }
+
 
     override fun startActivity(intent: Intent) {
         startActivityForResult(intent, -1)

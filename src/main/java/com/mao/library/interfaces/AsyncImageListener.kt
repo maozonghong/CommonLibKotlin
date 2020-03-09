@@ -10,7 +10,7 @@ import android.widget.ImageView
 interface AsyncImageListener {
     fun onLoadFailed(url: String?)
 
-    fun onLoadStart(url: String)
+    fun onLoadStart(url: String?)
 
     fun onLoadFinish(imageView: ImageView, bitmap: Bitmap)
 }

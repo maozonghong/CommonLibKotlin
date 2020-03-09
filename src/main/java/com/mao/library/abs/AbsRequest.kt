@@ -1,15 +1,12 @@
 package com.mao.library.abs
 
-import android.util.Log
 import com.mao.library.interfaces.NotRequestValue
-
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
-import java.util.HashMap
-
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import java.util.*
 
 open class AbsRequest {
 
@@ -29,7 +26,6 @@ open class AbsRequest {
     }
 
     private fun addParams(map: MutableMap<String, String>, fields: Array<Field>) {
-        Log.e("AbsRequest",fields.size.toString())
         for (field in fields) {
             if (!Modifier.isStatic(field.modifiers) && !field.isAnnotationPresent(NotRequestValue::class.java)) {
                 var any: Any? = null
@@ -70,10 +66,6 @@ open class AbsRequest {
                 try {
                     field.isAccessible = true
                     val obj = field.get(this)
-
-                    //                    if (obj instanceof OnFileUploadProgressListener) {
-                    //                        continue;
-                    //                    }
                     putBody(field.name, obj, extras)
                 } catch (e: Throwable) {
                     e.printStackTrace()
@@ -84,20 +76,9 @@ open class AbsRequest {
 
         val builder = MultipartBody.Builder()
         builder.setType(MultipartBody.FORM)
-        for ((key, value1) in extras) {
-            val value = value1 ?: continue
-
+        for ((key, value) in extras) {
             if (value is File) {
-                //                if(listener!=null){
-                //                    FileProgressRequestBody progressRequestBody=new FileProgressRequestBody((File)value,
-                //                            "multipart/form-data",listener);
-                //                    builder.addFormDataPart(key,((File) value).getName(),progressRequestBody);
-                //                }else{
-                builder.addFormDataPart(
-                    key, value.name,
-                    RequestBody.create(MultipartBody.FORM, value)
-                )
-                //                }
+                builder.addFormDataPart(key, value.name, RequestBody.create(MultipartBody.FORM, value))
             } else {
                 builder.addFormDataPart(key, value.toString())
             }

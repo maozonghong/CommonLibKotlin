@@ -7,11 +7,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
+import android.util.Log;
 
 import androidx.multidex.MultiDexApplication;
 
 import com.mao.library.bean.DownloadInfo;
 import com.mao.library.dbHelper.DownloadInfoDbHelper;
+import com.mao.library.manager.ThreadPoolManager;
+import com.mao.library.utils.ToastUtil;
 
 import java.io.File;
 import java.util.List;
@@ -53,6 +56,10 @@ public class AbsApplication extends MultiDexApplication {
             initApplication();
             instance=this;
         }
+    }
+
+    public static String getPACKAGENAME() {
+        return PACKAGENAME;
     }
 
     public static AbsApplication getInstance(){
@@ -135,21 +142,88 @@ public class AbsApplication extends MultiDexApplication {
     public File getFileDir() {
         File fileDir;
         if (hasSdCard()) {
-            fileDir = new File(Environment.getExternalStorageDirectory(), PACKAGENAME);
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                fileDir=getFilesDir();
+            }else{
+                fileDir = new File(Environment.getExternalStorageDirectory(), PACKAGENAME);
+            }
         } else {
             fileDir = getInstance().getCacheDir();
         }
 
         if (fileDir == null) {
-            fileDir = getInstance().getFilesDir(); ///data/data/包名/files
+            fileDir =getFilesDir(); ///data/data/包名/files
         }
 
         fileDir.mkdirs();
         return fileDir;
     }
 
+
+    public  int getVersionCode() {
+        return VERSION_CODE;
+    }
+
+    public  String getVERSION() {
+        return VERSION;
+    }
+
     public static boolean hasSdCard(){
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    /**
+     * 清理缓存目录
+     */
+    public void startClearCacheFolder() {
+        ThreadPoolManager.cacheExecute(() -> {
+            File cacheDir = getCacheDir();
+            if (cacheDir != null) {
+                Log.i("mao", "共删除：" + clearCacheFolder(cacheDir));
+            }
+            ToastUtil.showOkToast("清理缓存完成");
+        });
+    }
+
+    public static int clearCacheFolder(File dir) {
+        int deletedFiles = 0;
+        if (dir != null) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File child : files) {
+                    if (child != null) {
+                        if (child.isDirectory()) {
+                            deletedFiles += clearCacheFolder(child);
+                        }
+                        if (child.delete()) {
+                            deletedFiles++;
+                        }
+                    }
+                }
+            }
+        }
+        return deletedFiles;
+    }
+
+
+    /**
+     * 获取缓存文件大小
+     * @param dir
+     * @return
+     */
+    public long getCacheFileSize(File dir) {
+        long filesize = 0;
+        if (dir != null && dir.listFiles() != null) {
+            for (File child : dir.listFiles()) {
+                if (child != null) {
+                    if (child.isDirectory()) {
+                        filesize += getCacheFileSize(child);
+                    }
+                    filesize += child.length();
+                }
+            }
+        }
+        return filesize;
     }
 
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="green">#6DDD22</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="white">#ffffff</color>
+    <item name="image_download_tag_id" type="id"/>
+    <string name="app_name">CommonLibrary</string>
+    <style name="baseTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--<item name="android:windowSwipeToDismiss">true</item>-->
+        <item name="android:statusBarColor">@color/transparent</item>
+        <!--<item name="android:colorEdgeEffect">@color/color_f45c43</item>-->
+        <!--<item name="android:windowAllowEnterTransitionOverlap">true</item>-->
+        <!--<item name="android:windowAllowReturnTransitionOverlap">true</item>-->
+        <!--<item name="android:windowSharedElementEnterTransition">@android:transition/move</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@android:transition/move</item>-->
+    </style>
+    <style name="baseTheme.fullscreen" parent="@style/baseTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="transparent_activity" parent="@style/baseTheme">
+        <item name="android:windowSoftInputMode">stateHidden</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="transparent_dialog" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="transparent_full_activity" parent="@style/transparent_activity">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

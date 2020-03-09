@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.text.TextUtils
+import android.util.Log
 import android.widget.ImageView
 
 import com.bumptech.glide.Glide
@@ -25,7 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.VideoDecoder.FRAME_OPTION
 object AsyncImageManager {
 
     @JvmStatic
-    fun loadVideoScreenshot(imageView: ImageView?, url: String) {
+    fun loadVideoScreenshot(imageView: ImageView?, url: String?) {
         if (imageView != null) {
             val requestOptions = RequestOptions.frameOf(1000000)
             requestOptions.set(FRAME_OPTION, MediaMetadataRetriever.OPTION_CLOSEST)
@@ -54,7 +55,7 @@ object AsyncImageManager {
 
     @JvmOverloads
     @JvmStatic
-    fun downloadAsync(imageView: ImageView?, url: String, defaultImage: Int = 0, listener: AsyncImageListener? = null) {
+    fun downloadAsync(imageView: ImageView?, url: String?, defaultImage: Int, listener: AsyncImageListener? = null) {
         if (imageView != null) {
             if (TextUtils.isEmpty(url)) {
                 imageView.setImageResource(defaultImage)
@@ -64,7 +65,7 @@ object AsyncImageManager {
 
             GlideApp.with(imageView).asBitmap().placeholder(defaultImage).error(defaultImage)
                 .load(url).diskCacheStrategy(DiskCacheStrategy.RESOURCE).dontAnimate()
-                .into(object : MySimpleTarget(imageView, url, listener) {
+                .into(object : MySimpleTarget(imageView,url, listener) {
                     override fun onResourceCleared(placeholder: Drawable?) {
                         if (view != null && placeholder != null) {
                             view.setImageDrawable(placeholder)
@@ -112,7 +113,7 @@ object AsyncImageManager {
         private var listener: AsyncImageListener? = null
         var imageUrl: String?=null
 
-        constructor(imageView: ImageView, imageUrl: String, listener: AsyncImageListener?) : this(imageView) {
+        constructor(imageView: ImageView, imageUrl: String?, listener: AsyncImageListener?) : this(imageView) {
             this.imageUrl = imageUrl
             this.listener = listener
         }

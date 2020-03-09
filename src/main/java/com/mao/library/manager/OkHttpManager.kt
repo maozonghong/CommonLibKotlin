@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.text.TextUtils
+import android.util.Log
 
 import com.mao.library.abs.AbsApplication
 
@@ -170,13 +171,18 @@ class OkHttpManager private constructor() {
                             }
                         }
                         if (isJsonContent) {
-                            val jsonParams = JSONObject()
+                            var jsonStr:String?=null
+                            var jsonObject=JSONObject()
                             for ((key, value) in params) {
                                 if (!TextUtils.isEmpty(value) && !TextUtils.isEmpty(key)) {
-                                    jsonParams.put(key, value)
+                                    if(key == "null"){
+                                        jsonStr=value
+                                    }else{
+                                        jsonObject.put(key, value)
+                                    }
                                 }
                             }
-                            requestBody = RequestBody.create(MediaType.get("application/json"),jsonParams.toString())
+                            requestBody = RequestBody.create(MediaType.get("application/json"),jsonStr?:jsonObject.toString())
                         } else {
                             val builder = FormBody.Builder()
                             for ((key, value) in params) {
@@ -219,6 +225,7 @@ class OkHttpManager private constructor() {
                             builder.append("/")
                         }
                     }
+                    builder.deleteCharAt(builder.lastIndex)
                     requestBuilder.url(builder.toString())
                 }
             }

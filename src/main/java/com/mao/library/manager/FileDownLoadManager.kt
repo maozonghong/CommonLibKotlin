@@ -129,20 +129,22 @@ object FileDownLoadManager {
             return file
         }
 
-        var result: DownloadResult?
+        var result: DownloadResult
 
         var repeatCount = 0
 
         do {
             repeatCount++
             result = downloadFromNet(url, filePath)
-        } while (result!!.file == null && !result.isCancel && repeatCount < 5)
+        } while (result.file == null && !result.isCancel && repeatCount < 5)
 
         if (!result.isCancel) {
-            if (result.file != null && result.file!!.exists()) {
-                onDownloadFinish(url, result.file, false)
-            } else {
-                onDownloadFail(url, result.error_code)
+            result.file?.let { 
+                if(it.exists()){
+                    onDownloadFinish(url,it, false)
+                }else{
+                    onDownloadFail(url, result.error_code)
+                }
             }
         }
         return file
@@ -321,7 +323,7 @@ object FileDownLoadManager {
         return true
     }
 
-    private fun onDownloadFinish(url: String, file: File?, isExists: Boolean) {
+    private fun onDownloadFinish(url: String, file: File, isExists: Boolean) {
         val observers = downloadingUrls[url]
         if (observers != null && observers !== tempSet) {
             observers.file = file
@@ -406,7 +408,7 @@ object FileDownLoadManager {
     }
 
     private class DownloadResult {
-        internal var file: File? = null
+        internal var file: File?=null
         internal var isCancel: Boolean = false
         internal var error_code: Int = 0
     }
@@ -414,11 +416,11 @@ object FileDownLoadManager {
     abstract class DownloadObserver {
         private var any: Any?=null
 
-        fun onFileExists(url: String, file: File?) {
+        fun onFileExists(url: String, file: File) {
             onDownloadFinish(url, file)
         }
 
-        abstract fun onDownloadFinish(url: String, file: File?)
+        abstract fun onDownloadFinish(url: String, file: File)
 
         open fun onDownloadStart(url: String, count: Long) {}
 
