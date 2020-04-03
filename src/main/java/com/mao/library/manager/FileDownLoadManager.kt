@@ -137,15 +137,14 @@ object FileDownLoadManager {
             repeatCount++
             result = downloadFromNet(url, filePath)
         } while (result.file == null && !result.isCancel && repeatCount < 5)
-
         if (!result.isCancel) {
-            result.file?.let { 
+            result.file?.let {
                 if(it.exists()){
                     onDownloadFinish(url,it, false)
-                }else{
-                    onDownloadFail(url, result.error_code)
+                    return file
                 }
             }
+            onDownloadFail(url, result.error_code)
         }
         return file
     }
@@ -428,7 +427,7 @@ object FileDownLoadManager {
 
         open fun onDownloadFail(url: String, error_code: Int?, error: String?) {}
 
-        constructor() {}
+        constructor()
 
         constructor(any: Any) {
             this.any = any

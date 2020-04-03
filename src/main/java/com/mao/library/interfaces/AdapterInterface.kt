@@ -8,7 +8,7 @@ interface AdapterInterface<T> {
 
     fun addAll(list: List<T>)
 
-    fun getList(): List<T>
+    fun getList(): List<T>?
 
     fun add(position: Int, item: T)
 

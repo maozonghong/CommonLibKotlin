@@ -152,7 +152,7 @@ class OkHttpManager private constructor() {
         @JvmStatic
         fun getResponse(id: Int, url: String, headers: HashMap<String, String>?, mpEntity: MultipartBody?, params: Map<String, String>? = null, type: MethodType = MethodType.Post): Response? {
             val requestBuilder = Request.Builder()
-            var call: Call? = null
+            var  call: Call?=null
             var requestBody: RequestBody? = null
             var response: Response? = null
             when (type) {
@@ -235,13 +235,15 @@ class OkHttpManager private constructor() {
 
             try {
                 call = OkHttpInstanceManager.httpClient.newCall(requestBuilder.build())
-                requests[id] = call!!
-                response = call.execute()
+                requests[id] = call
+                response = call?.execute()
             } catch (e: Exception) {
                 e.printStackTrace()
-                if (!call!!.isCanceled) {
-                    call.cancel()
-                    throw Exception("网络异常")
+                call?.run {
+                    if(!isCanceled){
+                        cancel()
+                        throw Exception("网络异常")
+                    }
                 }
             } finally {
                 requests.remove(id)
@@ -279,9 +281,9 @@ class OkHttpManager private constructor() {
         fun cancel(id: Int) {
             if (requests != null) {
                 val request = requests[id]
-                if (request != null) {
+                request?.let {
                     requests.remove(id)
-                    ThreadPoolManager.cacheExecute(Runnable { request.cancel() })
+                    ThreadPoolManager.cacheExecute(Runnable { it.cancel() })
                 }
             }
         }

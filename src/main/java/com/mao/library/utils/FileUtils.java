@@ -304,6 +304,28 @@ public class FileUtils {
         return result;
     }
 
+    public static String readFileFromRaw(int resourceId) {
+        if(resourceId < 0 ){
+            return null;
+        }
+
+        String result = null;
+        try {
+            InputStream inputStream = AbsApplication.getInstance().getResources().openRawResource( resourceId );
+            // 获取文件的字节数
+            int length = inputStream.available();
+            // 创建byte数组
+            byte[] buffer = new byte[length];
+            // 将文件中的数据读到byte数组中
+            inputStream.read(buffer);
+            result =new String(buffer,Charset.defaultCharset());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static void unzip(final File file, final String outputDirectory) {
         ThreadPoolManager.cacheExecute(new Runnable() {
 

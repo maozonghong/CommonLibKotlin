@@ -13,10 +13,10 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     RecyclerView.Adapter<DataBoundViewHolder<V>>, AdapterInterface<T> {
 
     private var onItemClickListener: OnItemClickListener?=null
-    private var list: ArrayList<T>? = null
+    private var mList: ArrayList<T>? = null
 
     constructor(list: ArrayList<T>) {
-        this.list = list
+        this.mList = list
     }
 
     constructor() {}
@@ -30,7 +30,7 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<V>, position: Int) {
 
-        bind(holder.binding, list!![position])
+        bind(holder.binding, mList!![position])
         holder.binding.executePendingBindings()
     }
 
@@ -41,11 +41,16 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     }
 
     fun getItem(position: Int): T? {
-        return if (position >= 0 && this.list != null && this.list!!.size > position) this.list!![position] else null
+       mList?.let {
+           if(position>=0&&position<it.size){
+               return it[position]
+           }
+       }
+        return null
     }
 
     override fun setList(list: ArrayList<T>) {
-        this.list = list
+        this.mList = list
         notifyDataSetChanged()
     }
 
@@ -54,58 +59,61 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     }
 
     override fun addAll(list: List<T>) {
-        if (list != null && !list.isEmpty()) {
-            if (this.list == null) {
-                this.list = ArrayList()
-                this.list!!.addAll(list)
-                notifyDataSetChanged()
-            } else {
-                val positionStart = this.list!!.size
-                this.list!!.addAll(list)
-                notifyItemRangeInserted(positionStart, list.size)
+        list?.let {
+            if(list.isNotEmpty()){
+                if(mList==null){
+                    mList= ArrayList()
+                }
+                var positionStart = mList?.size?:0
+                mList?.addAll(it)
+                notifyItemRangeInserted(positionStart, it.size)
             }
         }
     }
 
-    override fun getList(): MutableList<T> {
-        return list!!
+    override fun getList(): MutableList<T>? {
+        return mList
     }
 
     override fun add(position: Int, item: T) {
-        if (list == null) {
-            list = ArrayList()
-            (list as ArrayList<T>).add(item)
+        if (mList == null) {
+            mList = ArrayList()
+            (mList as ArrayList<T>).add(item)
             notifyDataSetChanged()
         } else {
-            list!!.add(position, item)
+            mList?.add(position, item)
             notifyItemInserted(position)
             notifyItemRangeChanged(position, getSize() - position)
         }
     }
 
     override fun remove(position: Int) {
-        if (list != null && position < list!!.size) {
-            list!!.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, getSize() - position)
+        mList?.let {
+            if(position<it.size){
+                it.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, getSize() - position)
+            }
         }
     }
 
     override fun getSize(): Int {
-        return if (list != null) list!!.size else 0
+        return mList?.size?:0
     }
 
     override fun clear() {
-        if (list != null && !list!!.isEmpty()) {
-            list!!.clear()
+        mList?.run {
+            clear()
             notifyDataSetChanged()
         }
     }
 
     fun updateItem(position: Int, item: T) {
-        if (list != null && position < list!!.size && position != -1) {
-            list!![position] = item
-            notifyItemChanged(position)
+        mList?.let {
+            if(position<it.size&&position!=-1){
+                it[position]=item
+                notifyItemChanged(position)
+            }
         }
     }
 

@@ -224,7 +224,7 @@ public abstract class AbsDbHelper<T extends AbsDBModel> extends SQLiteOpenHelper
                 for (String tabName : created_tables) {
                     if (!tabName.equals("sqlite_sequence")) {
                         db.execSQL("DROP TABLE " + tabName);
-                        Log.i("nero", "DROP:" + tabName);
+                        Log.i("mao", "DROP:" + tabName);
                     }
                 }
             }
