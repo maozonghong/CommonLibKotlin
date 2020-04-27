@@ -130,20 +130,20 @@ class OkHttpManager private constructor() {
 
         @Throws(Exception::class)
         @JvmStatic
-        fun getResponse(id: Int, url: String, params: Map<String, String>, type: MethodType): Response? {
+        fun getResponse(id: Int, url: String, params: Map<String, String>?, type: MethodType): Response? {
             return getResponse(id, url, null, params, type)
         }
 
         @Throws(Exception::class)
         @JvmStatic
-        fun getResponse(id: Int, url: String, params: Map<String, String>): Response? {
+        fun getResponse(id: Int, url: String, params: Map<String, String>?): Response? {
             return getResponse(id, url, null, params, MethodType.Post)
         }
 
         @Throws(Exception::class)
         @JvmOverloads
         @JvmStatic
-        fun getResponse(id: Int, url: String, headers: HashMap<String, String>?, params: Map<String, String>, type: MethodType = MethodType.Post): Response? {
+        fun getResponse(id: Int, url: String, headers: HashMap<String, String>?, params: Map<String, String>?, type: MethodType = MethodType.Post): Response? {
             return getResponse(id, url, headers, null, params, type)
         }
 

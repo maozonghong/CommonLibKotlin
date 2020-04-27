@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
+import android.util.JsonToken;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
@@ -20,7 +21,9 @@ import com.mao.library.utils.DipUtils;
 import com.mao.library.utils.MainHandlerUtil;
 import com.mao.library.utils.ToastUtil;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -152,12 +155,17 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
      */
     protected abstract T parseJson(JSONObject json) throws Throwable;
 
+    protected T parseJson(JSONArray jsonArray) throws Throwable{
+
+        return null;
+    }
+
     public AbsTask(Context context, AbsRequest request) {
         this(context, request, null);
     }
 
     public AbsTask(Context context, AbsRequest request, OnTaskCompleteListener<T> completeListener) {
-        this.weakReference = new WeakReference<Context>(context);
+        this.weakReference = new WeakReference<>(context);
         this.request = request;
         addListener(completeListener);
         init();
@@ -179,7 +187,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
     public final void addListener(OnTaskCompleteListener<T> completeListener) {
         if (completeListener != null) {
             if (onTaskPostCompleteListeners == null) {
-                onTaskPostCompleteListeners = new HashSet<OnTaskCompleteListener<T>>();
+                onTaskPostCompleteListeners = new HashSet<>();
             }
             onTaskPostCompleteListeners.add(completeListener);
         }
@@ -270,6 +278,10 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
 
 
     protected T handleResponse(String response) throws Throwable {
+        Object jsonToken=new JSONTokener(response).nextValue();
+        if(jsonToken instanceof JSONArray){
+            return parseJson(new JSONArray(response));
+        }
         return parseJson(new JSONObject(response));
     }
 
@@ -538,9 +550,9 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
                 while ((count = fis.read(data, 0, data.length)) != -1) {
                     outStream.write(data, 0, count);
                 }
-
-                return parseJson(new JSONObject(new String(outStream.toByteArray(), "UTF-8")));
+                return handleResponse(new String(outStream.toByteArray(), "UTF-8"));
             } catch (Throwable e) {
+                e.printStackTrace();
             } finally {
                 if (fis != null) {
                     try {

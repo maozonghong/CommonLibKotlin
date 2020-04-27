@@ -12,7 +12,8 @@ import java.util.ArrayList
 abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     RecyclerView.Adapter<DataBoundViewHolder<V>>, AdapterInterface<T> {
 
-    private var onItemClickListener: OnItemClickListener?=null
+    var onItemClickListener:OnItemClickListener? =null
+
     private var mList: ArrayList<T>? = null
 
     constructor(list: ArrayList<T>) {
@@ -30,11 +31,11 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<V>, position: Int) {
 
-        bind(holder.binding, mList!![position])
+        bind(holder.binding, position)
         holder.binding.executePendingBindings()
     }
 
-    protected abstract fun bind(binding: V, item: T)
+    protected abstract fun bind(binding: V, position: Int)
 
     override fun getItemCount(): Int {
         return getSize()
@@ -138,12 +139,9 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(holder: RecyclerView.ViewHolder, position: Int)
+        fun onItemClick(dataBinding: ViewDataBinding, position: Int)
     }
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
-    }
 
     override fun unLockLoadingImage(context: Context) {
         //        if(context!=null&&context instanceof Activity&&!((Activity) context).isFinishing()){

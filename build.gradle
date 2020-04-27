@@ -55,7 +55,7 @@ dependencies {
 
     kapt 'androidx.annotation:annotation:1.1.0'
     
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    api 'androidx.recyclerview:recyclerview:1.1.0'
     
     api 'com.makeramen:roundedimageview:2.3.0'
 }

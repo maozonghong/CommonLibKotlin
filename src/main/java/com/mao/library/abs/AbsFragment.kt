@@ -95,7 +95,7 @@ abstract class AbsFragment :Fragment(){
             if (activity is AbsActivity) {
                 (activity as AbsActivity).startActivityFromFragment(this, intent, requestCode)
             } else {
-                activity!!.startActivityFromFragment(this, intent, requestCode)
+                activity?.startActivityFromFragment(this, intent, requestCode)
             }
         }
     }
@@ -144,4 +144,5 @@ abstract class AbsFragment :Fragment(){
         isInited = false
         mView = null
     }
+
 }
