@@ -1,5 +1,8 @@
 package com.mao.library.utils;
 
+import android.util.Base64;
+
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Locale;
 
@@ -31,6 +34,7 @@ public class DigestUtils {
     }
 
 
+
     public static String encryptHmacMd5(String content,String key) throws Exception{
         SecretKey secretKey = new SecretKeySpec(key.getBytes(), KEY_MAC);
         Mac mac = Mac.getInstance(secretKey.getAlgorithm());
@@ -50,4 +54,25 @@ public class DigestUtils {
         }
         return sb.toString();
     }
+
+
+    public static String encodeWord(String message) throws UnsupportedEncodingException {
+
+        return Base64.encodeToString(message.getBytes("utf-8"), Base64.NO_WRAP);
+
+    }
+
+    /**
+     * 解码
+     *
+     * @param encodeWord 编码后的内容
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String decodeWord(String encodeWord) throws UnsupportedEncodingException {
+
+        return new String(Base64.decode(encodeWord, Base64.NO_WRAP), "utf-8");
+
+    }
+
 }
