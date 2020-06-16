@@ -8,6 +8,7 @@ import android.widget.ImageView
  * on 2019/11/21
  */
 interface AsyncImageListener {
+
     fun onLoadFailed(url: String?)
 
     fun onLoadStart(url: String?)

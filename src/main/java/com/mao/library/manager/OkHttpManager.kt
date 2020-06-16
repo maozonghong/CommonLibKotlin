@@ -236,7 +236,7 @@ class OkHttpManager private constructor() {
             try {
                 call = OkHttpInstanceManager.httpClient.newCall(requestBuilder.build())
                 requests[id] = call
-                response = call?.execute()
+                response = call.execute()
             } catch (e: Exception) {
                 e.printStackTrace()
                 call?.run {
@@ -268,7 +268,7 @@ class OkHttpManager private constructor() {
 
         private fun addHeaders(headers: HashMap<String, String>, request: Request.Builder) {
             for (key in headers.keys) {
-                request.addHeader(key, headers[key]!!)
+                request.addHeader(key, headers[key])
             }
         }
 

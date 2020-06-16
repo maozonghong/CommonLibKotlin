@@ -1,13 +1,14 @@
 package com.mao.library.abs
 
+
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.mao.library.interfaces.AdapterInterface
-
-
-import java.util.ArrayList
+import java.util.*
 
 abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     RecyclerView.Adapter<DataBoundViewHolder<V>>, AdapterInterface<T> {
@@ -20,14 +21,15 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
         this.mList = list
     }
 
-    constructor() {}
+    constructor()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<V> {
-        val binding = createBinding(parent, viewType)
+        val binding :V= DataBindingUtil.inflate(LayoutInflater.from(parent.context),
+            getLayoutResId(viewType), parent, false)
         return DataBoundViewHolder(binding)
     }
 
-    protected abstract fun createBinding(parent: ViewGroup, viewType: Int): V
+    abstract fun getLayoutResId(viewType: Int): Int
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<V>, position: Int) {
 
@@ -53,10 +55,6 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
     override fun setList(list: ArrayList<T>) {
         this.mList = list
         notifyDataSetChanged()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
     }
 
     override fun addAll(list: List<T>) {
