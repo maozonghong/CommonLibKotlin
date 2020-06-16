@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.multidex.MultiDexApplication;
@@ -46,9 +47,21 @@ public class AbsApplication extends MultiDexApplication {
 
         DEVICEDID=android.os.Build.SERIAL;
         if(DEVICEDID.equals(Build.UNKNOWN)){
-            //ANDROID_ID 设备被重置之后 会变
-            DEVICEDID=android.provider.Settings.Secure.getString(getContentResolver(),
-                    android.provider.Settings.Secure.ANDROID_ID);
+
+            if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
+                try {
+                    DEVICEDID= Build.getSerial();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            if(DEVICEDID.equals(Build.UNKNOWN)){
+                //ANDROID_ID 设备被重置之后 会变
+                DEVICEDID=android.provider.Settings.Secure.getString(getContentResolver(),
+                        android.provider.Settings.Secure.ANDROID_ID);
+            }
+
         }
 
         if(isOnMainProcess()){

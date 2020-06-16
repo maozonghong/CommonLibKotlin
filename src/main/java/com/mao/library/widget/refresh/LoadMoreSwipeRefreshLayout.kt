@@ -39,7 +39,6 @@ class LoadMoreSwipeRefreshLayout @JvmOverloads constructor(context: Context, att
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLoadMoreWrapperAdapter:LoadMoreWrapperAdapter?=null
     private var mEmptyView: View? = null
-    private var mContainer: FrameLayout?=null
     private var defaultLoadMoreView: DefaultLoadMoreView? = null
     private var onRefreshListener: com.mao.library.interfaces.OnRefreshListener? = null
 
@@ -94,14 +93,12 @@ class LoadMoreSwipeRefreshLayout @JvmOverloads constructor(context: Context, att
 
 
     init {
-//        mContainer=FrameLayout(context)
-        recyclerView = RecyclerView(context)
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView?.layoutManager = layoutManager
-        recyclerView?.overScrollMode = View.OVER_SCROLL_ALWAYS
-        recyclerView?.itemAnimator = null
-        recyclerView?.addOnScrollListener(onScrollListener)
-        mContainer?.addView(recyclerView)
+        recyclerView = RecyclerView(context).apply {
+            layoutManager=LinearLayoutManager(context)
+            overScrollMode=View.OVER_SCROLL_ALWAYS
+            itemAnimator=null
+            addOnScrollListener(onScrollListener)
+        }
         defaultLoadMoreView = DefaultLoadMoreView(this)
         addView(recyclerView)
     }

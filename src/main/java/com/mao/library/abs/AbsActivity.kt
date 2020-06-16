@@ -218,6 +218,37 @@ open class AbsActivity : AppCompatActivity(), ActivityInterface {
     }
 
 
+    protected fun setWindowFlag() {
+        //1.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        // 在不隐藏StatusBar的情况下，将view所在window的显示范围扩展到StatusBar下面。
+        // 同时Activity的部分内容也因此被StatusBar覆盖遮挡
+
+        //2.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        // 作用:在不隐藏导航栏的情况下，将Activity的显示范围扩展到导航栏底部。
+        // 同时Activity的部分内容也因此被NavigationBar覆盖遮挡
+
+        //3.View.SYSTEM_UI_FLAG_LAYOUT_STABLE:
+        // 稳定布局。当StatusBar和NavigationBar动态显示和隐藏时，
+        // 系统为fitSystemWindow=true的view设置的padding大小都不会变化，所以view的内容的位置也不会发生移动。
+
+
+        //4.View.SYSTEM_UI_FLAG_FULLSCREEN
+        //作用是隐藏StatusBar.此Flag会因为各种的交互（如：跳转到其他应用,下拉StatusBar，弹出键盘）的发送而被系统清除。
+
+        //5.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION：(>=api16)
+        // 作用是隐藏系统NavigationBar。
+        //但是用户的任何交互，都会导致此Flag被系统清除，进而导航栏自动重新显示，
+        // 同时View.SYSTEM_UI_FLAG_FULLSCREEN也会被自动清除，因此StatusBar也会同时显示出来。
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (onActivityResultListeners != null) {

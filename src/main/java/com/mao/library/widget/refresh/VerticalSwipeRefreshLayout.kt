@@ -14,14 +14,12 @@ import kotlin.math.abs
 open class VerticalSwipeRefreshLayout @JvmOverloads constructor(context: Context, attrs:AttributeSet?) :
     SwipeRefreshLayout(context, attrs) {
 
-    private var mTouchSlop = 0
+    private val mTouchSlop =ViewConfiguration.get(context).scaledTouchSlop
+
     private var mPrevX = 0f
+
     private var isDisabled = false
 
-    init {
-
-        mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
-    }
 
     fun disableInterceptTouchEvent(isDisabled: Boolean) {
         this.isDisabled = isDisabled

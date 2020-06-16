@@ -89,16 +89,18 @@ open class OverScrollRecyclerView @JvmOverloads constructor(context: Context,att
 
 
    init {
-       recyclerView.isVerticalFadingEdgeEnabled = true
-       recyclerView.itemAnimator = null
-       recyclerView.setFadingEdgeLength(0)
-       recyclerView.overScrollMode = View.OVER_SCROLL_ALWAYS
-       recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,
-           false)
+       recyclerView.apply {
+           itemAnimator=null
+           overScrollMode=View.OVER_SCROLL_ALWAYS
+           layoutManager=LinearLayoutManager(context, LinearLayoutManager.VERTICAL,
+               false)
+           addOnScrollListener(onScrollListener)
+       }
         addView(recyclerView)
-        mGestureDetector = GestureDetector(context, this)
-        recyclerView.addOnScrollListener(onScrollListener)
-
+        mGestureDetector = GestureDetector(
+            context,
+            this
+        )
     }
 
 

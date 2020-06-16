@@ -152,10 +152,8 @@ class DefaultReFreshHeadView(refreshable: Refreshable):FrameLayout(refreshable.g
 
     fun headerPrepareToRefresh(scrollY: Int) {
         if (mHeaderView != null) {
-            Log.i(
-                "headerPrepareToRefresh",
-                "scrollY: $scrollY :headViewHeight:$mHeaderViewHeight"
-            )
+            Log.i("headerPrepareToRefresh", "scrollY: $scrollY :" +
+                    "headViewHeight:$mHeaderViewHeight")
             if (scrollY <=-mHeaderViewHeight) {
                 if (mHeaderState === Refreshable.STATE_PULL_TO_REFRESH) {
                     mHeaderImageView?.startAnimation(mRotateDownAnim)
