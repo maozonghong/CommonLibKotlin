@@ -6,6 +6,7 @@ import android.util.Log
 
 import com.mao.library.bean.DownloadInfo
 import com.mao.library.dbHelper.DownloadInfoDbHelper
+import com.mao.library.http.OkHttpInstanceManager
 import com.mao.library.utils.FileUtils
 import com.mao.library.utils.MainHandlerUtil
 

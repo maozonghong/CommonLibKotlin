@@ -52,12 +52,12 @@ abstract class AbsRecyclerAdapter<T, V : ViewDataBinding> :
         return null
     }
 
-    override fun setList(list: ArrayList<T>) {
+    override fun setList(list: ArrayList<T>?) {
         this.mList = list
         notifyDataSetChanged()
     }
 
-    override fun addAll(list: List<T>) {
+    override fun addAll(list: List<T>?) {
         list?.let {
             if(list.isNotEmpty()){
                 if(mList==null){

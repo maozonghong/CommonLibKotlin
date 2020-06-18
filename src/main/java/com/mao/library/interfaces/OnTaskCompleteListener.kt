@@ -1,6 +1,6 @@
 package com.mao.library.interfaces
 
-interface OnTaskCompleteListener<T> {
+interface OnTaskCompleteListener<T>  {
 
     fun onTaskComplete(result: T?)
 

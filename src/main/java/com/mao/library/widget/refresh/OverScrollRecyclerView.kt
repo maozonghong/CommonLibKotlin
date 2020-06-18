@@ -25,7 +25,7 @@ import kotlin.math.abs
  * Created by maozonghong
  * on 2020/6/15
  */
-open class OverScrollRecyclerView @JvmOverloads constructor(context: Context,attributeSet: AttributeSet):
+open class OverScrollRecyclerView @JvmOverloads constructor(context: Context,attributeSet: AttributeSet?):
     FrameLayout(context,attributeSet), GestureDetector.OnGestureListener, AdapterViewInterface {
 
     //header

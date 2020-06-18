@@ -58,6 +58,7 @@ class ThreadPoolManager {
             httpExecutorService.execute(runnable)
         }
 
+        @JvmStatic
         fun <T> httpSubmit(callable: Callable<T>): Future<T> {
             return httpExecutorService.submit(callable)
         }

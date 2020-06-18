@@ -1,4 +1,4 @@
-package com.mao.library.abs;
+package com.mao.library.http;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
-import android.util.JsonToken;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
@@ -14,8 +13,8 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.mao.library.R;
+import com.mao.library.abs.AbsModel;
 import com.mao.library.interfaces.OnTaskCompleteListener;
-import com.mao.library.manager.OkHttpManager;
 import com.mao.library.manager.ThreadPoolManager;
 import com.mao.library.utils.DipUtils;
 import com.mao.library.utils.MainHandlerUtil;
@@ -50,7 +49,7 @@ import okhttp3.Response;
  * @param <T> 网络请求完成后返回的对象
  */
 public abstract class AbsTask<T extends Serializable> implements Runnable, DialogInterface.OnCancelListener {
-    public AbsRequest request;
+    public com.mao.library.http.AbsRequest request;
     protected MyThread<T> thread;
     private volatile Set<OnTaskCompleteListener<T>> onTaskPostCompleteListeners, onTaskCompleteListeners;
     private WeakReference<Context> weakReference;
@@ -160,7 +159,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
         return null;
     }
 
-    public AbsTask(Context context, AbsRequest request) {
+    public AbsTask(Context context, com.mao.library.http.AbsRequest request) {
         this(context, request, null);
     }
 
@@ -447,7 +446,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
                         thread.isRestart = isRestart;
                     }
 
-                    if (!OkHttpManager.Companion.isNetworkAvailable()) {
+                    if (!OkHttpManager.isNetworkAvailable()) {
                         if (!loadedLast) {
                             String error = "网络异常，请确认是否联网";
                             if (needToast && needFailedToast) {
@@ -475,7 +474,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
                         }
                     }
                     try {
-                        ThreadPoolManager.Companion.httpSubmit(thread).get(600, TimeUnit.SECONDS);
+                        ThreadPoolManager.httpSubmit(thread).get(600, TimeUnit.SECONDS);
                     } catch (Throwable e) {
                         e.printStackTrace();
                         if (e instanceof TimeoutException) {

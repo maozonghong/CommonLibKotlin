@@ -15,6 +15,7 @@ interface Refreshable:AdapterViewInterface {
 
         const  val STATE_REFRESHING = 4
     }
+
     fun setOnRefreshListener(refreshListener: OnRefreshListener)
 
     fun setPullRefreshEnabled(enable: Boolean)

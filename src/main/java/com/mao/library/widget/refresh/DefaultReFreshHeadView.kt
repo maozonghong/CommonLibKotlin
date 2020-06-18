@@ -58,7 +58,7 @@ class DefaultReFreshHeadView(refreshable: Refreshable):FrameLayout(refreshable.g
         mRotateDownAnim.duration = ROTATE_ANIM_DURATION.toLong()
         mRotateDownAnim.fillAfter = true
 
-        LayoutInflater.from(context).inflate(R.layout.listview_refresh_header,this);
+        LayoutInflater.from(context).inflate(R.layout.listview_refresh_header,this)
 
         mHeaderView=findViewById(R.id.pull_to_refresh_header)
         mHeaderViewParent=findViewById(R.id.pull_to_refresh_header_parent)

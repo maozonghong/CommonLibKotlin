@@ -1,4 +1,4 @@
-package com.mao.library.manager
+package com.mao.library.http
 
 import java.util.concurrent.TimeUnit
 

@@ -17,7 +17,7 @@ import com.mao.library.wrapperadapter.LoadMoreWrapperAdapter
  * Created by maozonghong
  * on 2020/6/15
  */
-class LoadMoreRefreshRecyclerView @JvmOverloads constructor(context: Context,attributeSet: AttributeSet)
+class LoadMoreRefreshRecyclerView @JvmOverloads constructor(context: Context,attributeSet: AttributeSet?)
     :OverScrollRecyclerView(context, attributeSet), LoadMoreRefreshable {
 
     private val defaultReFreshHeadView: DefaultReFreshHeadView by lazy {

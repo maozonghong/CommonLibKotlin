@@ -13,5 +13,5 @@ interface AsyncImageListener {
 
     fun onLoadStart(url: String?)
 
-    fun onLoadFinish(imageView: ImageView, bitmap: Bitmap)
+    fun onLoadFinish(imageView: ImageView, bitmap: Bitmap?)
 }

@@ -15,24 +15,15 @@ class GridSpacingItemDecoration: RecyclerView.ItemDecoration {
     private var includeEdge = false
     private var headerNum = 0
 
-    constructor(
-        spanCount: Int,
-        spacing: Int,
-        includeEdge: Boolean,
-        headerNum: Int
-    ) {
+    constructor(spanCount: Int, spacing: Int, includeEdge: Boolean, headerNum: Int) {
         this.spanCount = spanCount
         this.spacing = spacing
         this.includeEdge = includeEdge
         this.headerNum = headerNum
     }
 
-    override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
+                                state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view) - headerNum // item position
         if (position >= 0) {
             val column = position % spanCount // item column

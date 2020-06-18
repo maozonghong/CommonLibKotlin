@@ -4,9 +4,9 @@ import android.content.Context
 import java.util.ArrayList
 
 interface AdapterInterface<T> {
-    fun setList(list: ArrayList<T>)
+    fun setList(list: ArrayList<T>?)
 
-    fun addAll(list: List<T>)
+    fun addAll(list: List<T>?)
 
     fun getList(): List<T>?
 

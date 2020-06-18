@@ -1,13 +1,13 @@
-package com.mao.library.manager
+package com.mao.library.http
 
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.text.TextUtils
-import android.util.Log
 
 import com.mao.library.abs.AbsApplication
+import com.mao.library.manager.ThreadPoolManager
 
 import org.json.JSONObject
 
@@ -131,20 +131,39 @@ class OkHttpManager private constructor() {
         @Throws(Exception::class)
         @JvmStatic
         fun getResponse(id: Int, url: String, params: Map<String, String>?, type: MethodType): Response? {
-            return getResponse(id, url, null, params, type)
+            return getResponse(
+                id,
+                url,
+                null,
+                params,
+                type
+            )
         }
 
         @Throws(Exception::class)
         @JvmStatic
         fun getResponse(id: Int, url: String, params: Map<String, String>?): Response? {
-            return getResponse(id, url, null, params, MethodType.Post)
+            return getResponse(
+                id,
+                url,
+                null,
+                params,
+                MethodType.Post
+            )
         }
 
         @Throws(Exception::class)
         @JvmOverloads
         @JvmStatic
         fun getResponse(id: Int, url: String, headers: HashMap<String, String>?, params: Map<String, String>?, type: MethodType = MethodType.Post): Response? {
-            return getResponse(id, url, headers, null, params, type)
+            return getResponse(
+                id,
+                url,
+                headers,
+                null,
+                params,
+                type
+            )
         }
 
         @Throws(Exception::class)
@@ -230,7 +249,10 @@ class OkHttpManager private constructor() {
                 }
             }
             if (headers != null) {
-                addHeaders(headers, requestBuilder)
+                addHeaders(
+                    headers,
+                    requestBuilder
+                )
             }
 
             try {
@@ -283,20 +305,26 @@ class OkHttpManager private constructor() {
                 val request = requests[id]
                 request?.let {
                     requests.remove(id)
-                    ThreadPoolManager.cacheExecute(Runnable { it.cancel() })
+                    ThreadPoolManager.cacheExecute(
+                        Runnable { it.cancel() })
                 }
             }
         }
 
         @JvmStatic
         fun setGzip_enable(gzip_enable: Boolean) {
-            OkHttpManager.gzip_enable = gzip_enable
+            Companion.gzip_enable = gzip_enable
             if (gzip_enable) {
-                gzipRequestInterceptor = GzipRequestInterceptor()
-                OkHttpInstanceManager.httpClient.interceptors().add(gzipRequestInterceptor)
+                gzipRequestInterceptor =
+                    GzipRequestInterceptor()
+                OkHttpInstanceManager.httpClient.interceptors().add(
+                    gzipRequestInterceptor
+                )
             } else {
                 if (gzipRequestInterceptor != null) {
-                    OkHttpInstanceManager.httpClient.interceptors().remove(gzipRequestInterceptor)
+                    OkHttpInstanceManager.httpClient.interceptors().remove(
+                        gzipRequestInterceptor
+                    )
                     gzipRequestInterceptor = null
                 }
             }
