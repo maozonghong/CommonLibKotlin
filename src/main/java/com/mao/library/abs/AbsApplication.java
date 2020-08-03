@@ -32,7 +32,6 @@ public class AbsApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
         PackageManager packageManager=getPackageManager();
         try {
             PackageInfo info= packageManager.getPackageInfo(getPackageName(),0);
@@ -51,6 +50,7 @@ public class AbsApplication extends MultiDexApplication {
             if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
                 try {
                     DEVICEDID= Build.getSerial();
+                    Log.e("AbsApplication","getSerail:"+DEVICEDID);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -69,6 +69,7 @@ public class AbsApplication extends MultiDexApplication {
             initApplication();
             instance=this;
         }
+
     }
 
     public static String getPACKAGENAME() {
