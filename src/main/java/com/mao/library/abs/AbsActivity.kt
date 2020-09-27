@@ -3,18 +3,21 @@ package com.mao.library.abs
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.mao.library.interfaces.ActivityInterface
 import com.mao.library.interfaces.OnActivityResultListener
 import com.mao.library.utils.MainHandlerUtil
-
-import java.util.HashSet
+import java.util.*
 
 /**
  * Created by maozonghong
@@ -27,6 +30,7 @@ open class AbsActivity : AppCompatActivity(), ActivityInterface {
     private var isStarting: Boolean = false
     private var needRestrictStarting = true
     private val animationTime = 500
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val compat = AbsActivityCompat.instance
         compat?.onCreate(this, savedInstanceState)
@@ -49,7 +53,7 @@ open class AbsActivity : AppCompatActivity(), ActivityInterface {
         onSetContentView()
     }
 
-    protected fun onSetContentView() {
+    open fun onSetContentView() {
         val compat = AbsActivityCompat.instance
         compat?.onSetContentView(this)
     }

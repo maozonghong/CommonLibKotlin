@@ -13,7 +13,7 @@ import android.view.View
  * on 2019/11/21
  */
 abstract class AbsFragment :Fragment(){
-    private var mView: View? = null
+    var mView: View? = null
     private var isInited: Boolean = false
     private var isSelected: Boolean = false
     private var isStart: Boolean = false
@@ -32,9 +32,9 @@ abstract class AbsFragment :Fragment(){
     }
 
     fun findViewById(id: Int): View? {
-        return if (mView != null) {
-            mView!!.findViewById(id)
-        } else null
+        return mView?.run {
+            findViewById(id)
+        }
     }
 
      abstract fun init()
@@ -45,10 +45,10 @@ abstract class AbsFragment :Fragment(){
    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (mView == null) {
-            if (getViewId() == 0) {
-                mView = getRootView(context)
+            mView = if (getViewId() == 0) {
+                getRootView(context)
             } else {
-                mView = View.inflate(context, getViewId(), null)
+                View.inflate(context, getViewId(), null)
             }
         }
     }
@@ -70,9 +70,7 @@ abstract class AbsFragment :Fragment(){
     }
 
     override fun onDestroyView() {
-        if(mView?.parent!=null){
-            (mView!!.parent as ViewGroup).removeView(mView)
-        }
+        (mView?.parent as? ViewGroup)?.removeView(mView)
         super.onDestroyView()
     }
 
@@ -91,7 +89,7 @@ abstract class AbsFragment :Fragment(){
     }
 
     override fun startActivityForResult(intent: Intent, requestCode: Int) {
-        if (activity != null) {
+        activity?.let {
             if (activity is AbsActivity) {
                 (activity as AbsActivity).startActivityFromFragment(this, intent, requestCode)
             } else {

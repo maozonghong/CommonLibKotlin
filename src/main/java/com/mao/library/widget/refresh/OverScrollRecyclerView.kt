@@ -97,10 +97,7 @@ open class OverScrollRecyclerView @JvmOverloads constructor(context: Context,att
            addOnScrollListener(onScrollListener)
        }
         addView(recyclerView)
-        mGestureDetector = GestureDetector(
-            context,
-            this
-        )
+        mGestureDetector = GestureDetector(context, this)
     }
 
 

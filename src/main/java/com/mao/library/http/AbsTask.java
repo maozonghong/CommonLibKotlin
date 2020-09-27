@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
+import androidx.lifecycle.LifecycleEventObserver;
+
 import com.mao.library.R;
 import com.mao.library.abs.AbsModel;
 import com.mao.library.interfaces.OnTaskCompleteListener;
@@ -388,7 +390,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
         isSending = true;
 
         try {
-            T t = ThreadPoolManager.Companion.httpSubmit(thread = new MyThread<T>(this)).get(60, TimeUnit.SECONDS);
+            T t = ThreadPoolManager.httpSubmit(thread = new MyThread<T>(this)).get(60, TimeUnit.SECONDS);
             return t;
         } catch (Exception e) {
             e.printStackTrace();
@@ -420,68 +422,65 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
     protected void start(final boolean isLoadMore, final boolean isRestart) {
         isSending = true;
 
-        ThreadPoolManager.Companion.cacheExecute(new Runnable() {
-
-            @Override
-            public void run() {
-                Context context = getContext();
-                if (context != null) {
-                    boolean loadedLast = false;
-                    if (thread == null) {
-                        thread = new MyThread<T>(AbsTask.this);
-                        if (needLast && !isLoadMore) {
-                            T result = loadLast();
-                            if (result != null) {
-                                loadedLast = true;
-                                completed(result, isLoadMore, true);
-                                if (needOnlyLast) {
-                                    isSending = false;
-                                    return;
-                                }
+        ThreadPoolManager.cacheExecute(() -> {
+            Context context = getContext();
+            if (context != null) {
+                boolean loadedLast = false;
+                if (thread == null) {
+                    thread = new MyThread(AbsTask.this);
+                    if (needLast && !isLoadMore) {
+                        T result = loadLast();
+                        if (result != null) {
+                            loadedLast = true;
+                            completed(result, isLoadMore, true);
+                            if (needOnlyLast) {
+                                isSending = false;
+                                return;
                             }
                         }
-                    } else {
-                        thread.cancel();
-                        thread = new MyThread<T>(AbsTask.this);
-                        thread.isRestart = isRestart;
                     }
+                } else {
+                    thread.cancel();
+                    thread = new MyThread(AbsTask.this);
+                    thread.isRestart = isRestart;
+                }
 
-                    if (!OkHttpManager.isNetworkAvailable()) {
-                        if (!loadedLast) {
-                            String error = "网络异常，请确认是否联网";
-                            if (needToast && needFailedToast) {
-                                ToastUtil.showErrorToast(error);
-                            }
-                            failed(error, 0);
+                if (!OkHttpManager.isNetworkAvailable()) {
+                    if (!loadedLast) {
+                        String error = "网络异常，请确认是否联网";
+                        if (needToast && needFailedToast) {
+                            ToastUtil.showErrorToast(error);
                         }
-                        return;
+                        failed(error, 0);
                     }
+                    return;
+                }
 
-                    thread.isLoadMore = isLoadMore;
+                thread.isLoadMore = isLoadMore;
 
-                    if (needToast && !thread.isRestart && !isLoadMore) {
-                        if (context instanceof Activity) {
-                            Activity activity = (Activity) context;
-                            if (!activity.isFinishing()) {
-                                activity.runOnUiThread(()->
+                if (needToast && !thread.isRestart && !isLoadMore) {
+                    if (context instanceof Activity) {
+                        Activity activity = (Activity) context;
+                        if (!activity.isFinishing()) {
+                            activity.runOnUiThread(() ->
                                     showDialog()
-                                );
-                            }
-                        } else {
-                            MainHandlerUtil.INSTANCE.post(()->
-                                showDialog()
                             );
                         }
+                    } else {
+                        MainHandlerUtil.post(() ->
+                                showDialog()
+                        );
                     }
-                    try {
-                        ThreadPoolManager.httpSubmit(thread).get(600, TimeUnit.SECONDS);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                        if (e instanceof TimeoutException) {
-                            error("请求超时", 0);
-                        } else {
-                            error(e.getMessage(), 0);
-                        }
+                }
+                thread.call();
+                try {
+                    ThreadPoolManager.httpSubmit(thread).get(600, TimeUnit.SECONDS);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    if (e instanceof TimeoutException) {
+                        error("请求超时", 0);
+                    } else {
+                        error(e.getMessage(), 0);
                     }
                 }
             }
@@ -512,7 +511,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
     }
 
     private void setProgress() {
-        ThreadPoolManager.Companion.cacheExecute(()->{
+        ThreadPoolManager.cacheExecute(()->{
             while (dialog.isShowing() && progress < 90) {
                 progress += 3;
 
@@ -782,7 +781,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
             if (needRestart) {
                 if (delay < 60 && thread != null && !thread.isCancelled) {
                     isSending=false;
-                    ThreadPoolManager.Companion.cacheExecute(()->{
+                    ThreadPoolManager.cacheExecute(()->{
                         try {
                             Thread.sleep((delay = delay * 2) * 1000);
                         } catch (InterruptedException e) {
@@ -873,7 +872,7 @@ public abstract class AbsTask<T extends Serializable> implements Runnable, Dialo
             }
 
             if (!isCancelled && absTask.isSending) {
-                OkHttpManager.Companion.cancel(absTask.hashCode());
+                OkHttpManager.cancel(absTask.hashCode());
 
                 absTask.isSending = false;
                 isCancelled = true;

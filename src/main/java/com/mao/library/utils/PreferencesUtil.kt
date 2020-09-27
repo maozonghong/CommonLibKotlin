@@ -33,6 +33,7 @@ object PreferencesUtil {
         return editor.commit()
     }
 
+    @JvmStatic
     fun readString(name: String): String? {
         return mPreferences.getString(name, "")
     }
